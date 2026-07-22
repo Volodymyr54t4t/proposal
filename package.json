@@ -1,0 +1,16 @@
+{
+  "name": "proposal",
+  "version": "1.0.0",
+  "description": "Романтичний сайт-пропозиція для Лєри від Володимира",
+  "private": true,
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
