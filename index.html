@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="theme-color" content="#0a0514" />
-<title>Лєро, я кохаю тебе ❤️</title>
-<meta name="description" content="Особливий сюрприз для Лєри від Володимира" />
+<title>Лера, я люблю тебя ❤️</title>
+<meta name="description" content="Романтический сюрприз для Леры от Врвы" />
 
 <!-- Бібліотеки -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -42,7 +42,7 @@
     letter-spacing: 0.5px;
   }
 
-  /* Тло: галактика (three.js) + аврора */
+  /* Фон: галактика (three.js) + аврора */
   #galaxy-canvas {
     position: fixed; inset: 0; z-index: -3;
   }
@@ -61,7 +61,7 @@
     50% { transform: translate(40px, -30px) scale(1.15); }
   }
 
-  /* Літаючі сердечка */
+  /* Летающие сердечки */
   #hearts-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 
   /* Загальна секція */
@@ -80,7 +80,7 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.35);
   }
 
-  /* Інтро */
+  /* Интро */
   #intro {
     position: fixed; inset: 0; z-index: 50;
     background: radial-gradient(circle at 50% 40%, #1b0e33, #05030c 80%);
@@ -123,7 +123,7 @@
   .scroll-hint { position: absolute; bottom: 30px; color: var(--muted); font-size: 0.9rem; animation: bob 1.6s ease-in-out infinite; }
   @keyframes bob { 50% { transform: translateY(10px); } }
 
-  /* Таймер стосунків */
+  /* Таймер отношений */
   .timer-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 20px; }
   .timer-cell { padding: 22px 20px; min-width: 110px; }
   .timer-cell .num { font-size: 2.4rem; font-weight: 700; color: var(--gold); }
@@ -143,7 +143,7 @@
     background: linear-gradient(transparent, rgba(0,0,0,0.7)); font-size: 0.95rem;
   }
 
-  /* Любовний лист */
+  /* Любовное письмо */
   .letter {
     max-width: 680px; padding: 40px; text-align: left; font-size: 1.1rem;
     line-height: 1.9; color: var(--text);
@@ -151,7 +151,7 @@
   .letter p { margin-bottom: 18px; }
   .letter .sign { text-align: right; color: var(--gold); font-style: italic; }
 
-  /* Пропозиція */
+  /* Предложение */
   #proposal .ring { font-size: 4rem; margin-bottom: 10px; }
   .proposal-buttons { display: flex; gap: 20px; margin-top: 36px; align-items: center; justify-content: center; position: relative; min-height: 80px; flex-wrap: wrap; }
   .btn-yes {
@@ -167,7 +167,7 @@
     transition: all 0.25s ease;
   }
 
-  /* Святкування ТАК */
+  /* Празднование ДА */
   #celebration { display: none; }
   #celebration.show { display: flex; }
   #celebration .yay {
@@ -177,43 +177,6 @@
   }
   .roses { font-size: 2.4rem; margin: 20px 0; letter-spacing: 8px; }
 
-  /* Віджети (карта + погода) */
-  .widgets { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 1000px; width: 100%; }
-  @media (min-width: 820px) { .widgets { grid-template-columns: 1.4fr 1fr; } }
-  .widget { padding: 24px; text-align: left; }
-  .widget h3 { color: var(--gold); margin-bottom: 14px; }
-  .map-frame { width: 100%; height: 300px; border: 0; border-radius: 16px; }
-  .weather-main { display: flex; align-items: center; gap: 16px; }
-  .weather-temp { font-size: 3rem; font-weight: 700; color: var(--pink-soft); }
-  .weather-desc { color: var(--muted); }
-  .weather-row { display: flex; justify-content: space-between; margin-top: 10px; color: var(--muted); border-top: 1px solid var(--glass-border); padding-top: 10px; }
-
-  /* Музичний плеєр */
-  .music-player {
-    position: fixed; bottom: 20px; right: 20px; z-index: 40;
-    display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 999px;
-  }
-  .music-btn {
-    width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.1rem;
-    background: linear-gradient(90deg, var(--pink), var(--gold)); color: #2a0a18; display: grid; place-items: center;
-  }
-  .music-title { font-size: 0.85rem; color: var(--muted); max-width: 120px; }
-  .equalizer { display: flex; gap: 3px; align-items: flex-end; height: 20px; }
-  .equalizer span { width: 3px; background: var(--pink-soft); height: 6px; border-radius: 2px; }
-  .equalizer.playing span { animation: eq 0.8s ease-in-out infinite; }
-  .equalizer span:nth-child(2){animation-delay:.2s} .equalizer span:nth-child(3){animation-delay:.4s} .equalizer span:nth-child(4){animation-delay:.1s}
-  @keyframes eq { 0%,100%{height:6px} 50%{height:20px} }
-
-  /* Секція налаштувань */
-  .config-grid { display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 560px; width: 100%; text-align: left; }
-  .config-grid label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
-  .config-grid input {
-    width: 100%; padding: 12px 14px; border-radius: 12px; background: rgba(0,0,0,0.25);
-    border: 1px solid var(--glass-border); color: var(--text); font-size: 1rem;
-  }
-  .config-box { padding: 28px; }
-  .config-note { color: var(--muted); font-size: 0.85rem; margin-top: 14px; }
-
   .reveal { opacity: 0; transform: translateY(40px); }
 
   footer { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 0.9rem; }
@@ -221,159 +184,93 @@
 </head>
 <body>
 
-<!-- Тло -->
+<!-- Фон -->
 <canvas id="galaxy-canvas"></canvas>
 <div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 <canvas id="hearts-canvas"></canvas>
 
-<!-- Кінематографічне інтро -->
+<!-- Кинематографичное интро -->
 <div id="intro">
-  <div class="intro-title display" id="introTitle">Лєро…</div>
-  <div class="intro-sub" id="introSub">є дещо, що я давно хочу тобі сказати</div>
-  <button class="enter-btn" id="enterBtn">Відкрити ❤️</button>
+    <div class="intro-title display" id="introTitle">Лера…</div>
+    <div class="intro-sub" id="introSub">есть кое-что, что я давно хочу тебе сказать</div>
+    <button class="enter-btn" id="enterBtn">Открыть ❤️</button>
 </div>
 
 <main id="content" style="display:none;">
-
-  <!-- Hero -->
   <section id="hero">
     <div class="scroll-hint">прокрути вниз ↓</div>
-    <p style="color:var(--muted); letter-spacing:3px; text-transform:uppercase; font-size:0.85rem;">Для найдорожчої людини</p>
-    <h1 class="big-name" id="heroName">Лєра</h1>
+    <p style="color:var(--muted); letter-spacing:3px; text-transform:uppercase; font-size:0.85rem;">Для самой дорогой</p>
+    <h1 class="big-name" id="heroName">Лера</h1>
     <div class="typewriter"><span id="typed"></span><span class="cursor">&nbsp;</span></div>
   </section>
 
-  <!-- Таймер стосунків -->
+  <!-- Таймер отношений -->
   <section id="timer">
-    <h2 class="section-title reveal">Ми разом уже</h2>
-    <p class="section-lead reveal">Кожна секунда поруч із тобою — найкращий подарунок.</p>
+    <h2 class="section-title reveal">Мы вместе уже</h2>
+    <p class="section-lead reveal">Каждая секунда рядом с тобой — лучший подарок.</p>
     <div class="timer-grid">
-      <div class="timer-cell glass reveal"><div class="num" id="t-days">0</div><div class="lbl">днів</div></div>
-      <div class="timer-cell glass reveal"><div class="num" id="t-hours">0</div><div class="lbl">годин</div></div>
-      <div class="timer-cell glass reveal"><div class="num" id="t-mins">0</div><div class="lbl">хвилин</div></div>
+      <div class="timer-cell glass reveal"><div class="num" id="t-days">0</div><div class="lbl">дней</div></div>
+      <div class="timer-cell glass reveal"><div class="num" id="t-hours">0</div><div class="lbl">часов</div></div>
+      <div class="timer-cell glass reveal"><div class="num" id="t-mins">0</div><div class="lbl">минут</div></div>
       <div class="timer-cell glass reveal"><div class="num" id="t-secs">0</div><div class="lbl">секунд</div></div>
     </div>
   </section>
 
   <!-- Галерея -->
   <section id="gallery">
-    <h2 class="section-title reveal">Наші миті</h2>
-    <p class="section-lead reveal">Кілька спогадів, які назавжди в моєму серці.</p>
+    <h2 class="section-title reveal">Наши моменты</h2>
+    <p class="section-lead reveal">Несколько мгновений, что навсегда в моем сердце.</p>
     <div class="gallery">
-      <figure class="reveal"><img src="/1.jpg" alt="Наше спільне фото 1" /><figcaption></figcaption></figure>
-      <figure class="reveal"><img src="/2.jpg" alt="Наше спільне фото 2" /><figcaption></figcaption></figure>
-      <figure class="reveal"><img src="/3.jpg" alt="Наше спільне фото 3" /><figcaption></figcaption></figure>
+      <figure class="reveal"><img src="/1.jpg" alt="Наше совместное фото 1" /><figcaption></figcaption></figure>
+      <figure class="reveal"><img src="/3.jpg" alt="Наше совместное фото 2" /><figcaption></figcaption></figure>
+      <figure class="reveal"><img src="/2.jpg" alt="Наше совместное фото 3" /><figcaption></figcaption></figure>
     </div>
   </section>
 
-  <!-- Любовний лист -->
+  <!-- Любовное письмо -->
   <section id="letter">
-    <h2 class="section-title reveal">Лист для тебе</h2>
+    <h2 class="section-title reveal">Письмо для тебя</h2>
     <div class="letter glass reveal">
-      <p>Люба Лєро,</p>
-      <p>Відколи ти з&apos;явилася в моєму житті, кожен день став світлішим. Ти — моя усмішка вранці й моя остання думка перед сном.</p>
-      <p>Ти робиш мене кращим, ти надихаєш і зігріваєш навіть у найхолодніші дні. Поруч із тобою я знайшов дім — не місце, а відчуття.</p>
-      <p>Я хочу тримати твою руку і в свята, і в буденні дні, сміятися разом і долати будь-які труднощі пліч-о-пліч.</p>
-      <p>Тому я приготував це маленьке зізнання… і одне важливе запитання.</p>
-      <p class="sign">Назавжди твій, Володимир</p>
+      <p>Любимая Лера,</p>
+      <p>С тех пор как ты появилась в моей жизни, каждый день стал ярче. Ты — моя улыбка утром и моя последняя мысль перед сном.</p>
+      <p>Ты делаешь меня лучше, ты вдохновляешь и согреваешь даже в самые холодные дни. Рядом с тобой я нашёл дом — не место, а ощущение.</p>
+      <p>Я хочу держать твою руку и в праздники, и в обычные дни, смеяться вместе и преодолевать любые трудности плечом к плечу.</p>
+      <p>Поэтому я приготовил это маленькое признание… и один важный вопрос.</p>
+      <p class="sign">Навсегда твой, Вова</p>
     </div>
   </section>
 
-  <!-- Пропозиція -->
+  <!-- Предложение -->
   <section id="proposal">
     <div class="ring reveal">💍</div>
-    <h2 class="section-title reveal">Лєро, ти будеш моєю дівчиною?</h2>
-    <p class="section-lead reveal">Я хочу прожити з тобою все життя. Що скажеш?</p>
+    <h2 class="section-title reveal">Лера, ты будешь моей девушкой?</h2>
+    <p class="section-lead reveal">Я хочу провести с тобой всю жизнь. Что скажешь?</p>
     <div class="proposal-buttons">
-      <button class="btn-yes" id="btnYes">ТАК ❤️</button>
-      <button class="btn-no" id="btnNo">Ні</button>
+      <button class="btn-yes" id="btnYes">ДА ❤️</button>
+      <button class="btn-no" id="btnNo">НЕТ</button>
     </div>
   </section>
 
-  <!-- Віджети: карта + погода -->
-  <section id="widgets-section">
-    <h2 class="section-title reveal">Наше особливе місце</h2>
-    <p class="section-lead reveal">Тут я хочу зустріти з тобою ще тисячі світанків.</p>
-    <div class="widgets">
-      <div class="widget glass reveal">
-        <h3>📍 Місце на карті</h3>
-        <iframe class="map-frame" id="mapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Kyiv,Ukraine&output=embed" title="Карта"></iframe>
-      </div>
-      <div class="widget glass reveal">
-        <h3>🌤 Погода зараз</h3>
-        <div class="weather-main">
-          <div class="weather-temp" id="wTemp">—</div>
-          <div>
-            <div id="wDesc" class="weather-desc">завантаження…</div>
-            <div class="weather-desc" id="wCity">Київ</div>
-          </div>
-        </div>
-        <div class="weather-row"><span>Відчувається як</span><span id="wFeels">—</span></div>
-        <div class="weather-row"><span>Вітер</span><span id="wWind">—</span></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Налаштування -->
-  <section id="config">
-    <h2 class="section-title reveal">Налаштування</h2>
-    <p class="section-lead reveal">Змінюй імена, фото та музику під свою історію.</p>
-    <div class="config-box glass reveal">
-      <div class="config-grid">
-        <div>
-          <label for="cfgHer">Ім&apos;я коханої</label>
-          <input id="cfgHer" type="text" value="Лєра" />
-        </div>
-        <div>
-          <label for="cfgHim">Твоє ім&apos;я</label>
-          <input id="cfgHim" type="text" value="Володимир" />
-        </div>
-        <div>
-          <label for="cfgDate">Дата початку стосунків</label>
-          <input id="cfgDate" type="date" value="2023-06-14" />
-        </div>
-        <div>
-          <label for="cfgMusic">Посилання на музику (mp3)</label>
-          <input id="cfgMusic" type="text" placeholder="/music.mp3 або https://…" />
-        </div>
-        <div>
-          <label for="cfgPlace">Місце на карті</label>
-          <input id="cfgPlace" type="text" value="Kyiv, Ukraine" />
-        </div>
-        <button class="btn-yes" id="cfgApply" style="font-size:1rem; padding:14px 30px;">Застосувати</button>
-      </div>
-      <p class="config-note">Фото використовуються з файлів <b>1.jpg</b>, <b>2.jpg</b>, <b>3.jpg</b> у папці public.</p>
-    </div>
-  </section>
-
-  <footer>Зроблено з ❤️ для Лєри · Володимир</footer>
+  <footer>Сделано с ❤️ для Леры · Вова</footer>
 </main>
 
-<!-- Святкування ТАК -->
+<!-- Празднование ДА -->
 <section id="celebration">
   <div class="yay display">ВОНА СКАЗАЛА ТАК! 🎉</div>
   <div class="roses">🌹🌹🌹🌹🌹</div>
-  <p class="section-lead">Лєро, ти зробила мене найщасливішою людиною на світі. Я тебе кохаю! ❤️</p>
-  <button class="btn-yes" id="againBtn" style="margin-top:20px;">Переглянути ще раз</button>
+  <p class="section-lead">Лера, ты сделала меня самым счастливым человеком на свете. Я тебя люблю! ❤️</p>
+  <button class="btn-yes" id="againBtn" style="margin-top:20px;">Посмотреть снова</button>
 </section>
-
-<!-- Музичний плеєр -->
-<div class="music-player glass" id="musicPlayer" style="display:none;">
-  <button class="music-btn" id="musicToggle" aria-label="Відтворити музику">▶</button>
-  <div class="equalizer" id="equalizer"><span></span><span></span><span></span><span></span></div>
-  <div class="music-title" id="musicTitle">Наша мелодія</div>
-</div>
-<audio id="audio" loop></audio>
 
 <script>
   // ================= КОНФІГУРАЦІЯ =================
   const config = {
-    her: "Лєра",
-    him: "Володимир",
-    startDate: "2023-06-14",
-    music: "",
-    place: "Kyiv, Ukraine",
+    her: "Лера",
+    him: "Вова",
+    startDate: "2026-07-19",
+    music: "", // Вставь ссылку на mp3 вручную, если хочешь музыку
+    place: "Москва, Россия",
     photos: ["/1.jpg", "/2.jpg", "/3.jpg"],
   };
 
@@ -397,10 +294,10 @@
     overlay.style.padding = "32px";
     overlay.innerHTML = `
       <div style="max-width:560px;">
-        <h1 style="font-size:2rem; margin-bottom:18px; color:#ff5d8f;">Сторінку відкрито не через сервер</h1>
-        <p style="font-size:1rem; color:#ddd; margin-bottom:24px; line-height:1.6;">Для роботи бота та надсилання Telegram-повідомлення необхідно відкривати сайт через сервер, наприклад <strong>http://localhost:3000</strong>.</p>
-        <button id="openLocalBtn" style="border:none; border-radius:999px; padding:14px 24px; background:#ff5d8f; color:#1d0210; font-weight:700; cursor:pointer; margin-bottom:14px;">Відкрити на localhost</button>
-        <div style="color:#bbb; font-size:0.95rem;">Якщо сервер ще не запущено, виконай <code>npm start</code> у папці проекту.</div>
+        <h1 style="font-size:2rem; margin-bottom:18px; color:#ff5d8f;">Страница открыта не через сервер</h1>
+        <p style="font-size:1rem; color:#ddd; margin-bottom:24px; line-height:1.6;">Для работы бота и отправки Telegram-сообщения открой сайт через сервер, например <strong>http://localhost:3000</strong>.</p>
+        <button id="openLocalBtn" style="border:none; border-radius:999px; padding:14px 24px; background:#ff5d8f; color:#1d0210; font-weight:700; cursor:pointer; margin-bottom:14px;">Открыть на localhost</button>
+        <div style="color:#bbb; font-size:0.95rem;">Если сервер еще не запущен, запусти <code>npm start</code> в папке проекта.</div>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -474,7 +371,7 @@
     });
   })();
 
-  // ================= ЛІТАЮЧІ СЕРДЕЧКА =================
+  // ================= ЛЕТАЮЩИЕ СЕРДЕЧКИ =================
   (function hearts() {
     const canvas = document.getElementById("hearts-canvas");
     const ctx = canvas.getContext("2d");
@@ -506,7 +403,7 @@
     loop();
   })();
 
-  // ================= ІНТРО =================
+  // ================= ИНТРО =================
   const tl = gsap.timeline();
   tl.to("#introTitle", { opacity: 1, y: -10, duration: 1.4, ease: "power3.out" })
     .to("#introSub", { opacity: 1, duration: 1.2 }, "-=0.4")
@@ -516,20 +413,18 @@
     gsap.to("#intro", { opacity: 0, duration: 0.8, onComplete: () => {
       document.getElementById("intro").style.display = "none";
       document.getElementById("content").style.display = "block";
-      document.getElementById("musicPlayer").style.display = "flex";
       startTypewriter();
       initReveal();
-      tryPlayMusic();
     }});
   });
 
   // ================= ТАЙПРАЙТЕР =================
   function startTypewriter() {
     const phrases = [
-      "ти — моє найкраще «так» у житті…",
-      "з тобою навіть буденність — свято.",
-      "я хочу бути поруч завжди.",
-      "прокрути далі, у мене є запитання ❤️",
+      "ты — моё лучшее «да» в жизни…",
+      "с тобой даже обычные дни становятся праздником.",
+      "хочу быть рядом всегда.",
+      "листаем дальше, у меня есть вопрос ❤️",
     ];
     const el = document.getElementById("typed");
     let pi = 0, ci = 0, deleting = false;
@@ -544,7 +439,7 @@
     tick();
   }
 
-  // ================= ПОЯВА ПРИ ПРОКРУТЦІ =================
+  // ================= ПОЯВЛЕНИЕ ПРИ ПРОКРУТКЕ =================
   function initReveal() {
     const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver((entries) => {
@@ -558,7 +453,7 @@
     els.forEach((el) => io.observe(el));
   }
 
-  // ================= ТАЙМЕР СТОСУНКІВ =================
+  // ================= ТАЙМЕР ОТНОШЕНИЙ =================
   function updateTimer() {
     const start = new Date(config.startDate + "T00:00:00");
     let diff = Math.max(0, Date.now() - start.getTime());
@@ -573,9 +468,9 @@
   }
   setInterval(updateTimer, 1000); updateTimer();
 
-  // ================= КНОПКА "НІ", ЩО ТІКАЄ =================
+  // ================= КНОПКА "НЕТ", КОТОРАЯ УБЕГАЕТ =================
   const btnNo = document.getElementById("btnNo");
-  const noPhrases = ["Ні", "Точно?", "Подумай ще!", "А якщо так?", "Не втечеш 😅", "Ну будь ласка ❤️", "Спробуй впіймати!"];
+  const noPhrases = ["Нет", "Точно?", "Подумай еще!", "А если да?", "Не убежишь 😅", "Ну пожалуйста ❤️", "Попробуй поймать!"];
   let noIdx = 0;
   function escape() {
     noIdx = (noIdx + 1) % noPhrases.length;
@@ -593,7 +488,7 @@
   btnNo.addEventListener("click", (e) => { e.preventDefault(); escape(); });
   btnNo.addEventListener("touchstart", (e) => { e.preventDefault(); escape(); }, { passive: false });
 
-  // ================= КНОПКА "ТАК" =================
+  // ================= КНОПКА "ДА" =================
   document.getElementById("btnYes").addEventListener("click", async (event) => {
     event.preventDefault();
     setSendStatus("Надсилаю повідомлення до Telegram...");
@@ -625,7 +520,7 @@
     setTimeout(() => clearInterval(fw), 6000);
   }
 
-  // ================= НАДСИЛАННЯ У TELEGRAM =================
+  // ================= ОТПРАВКА В TELEGRAM =================
   function setSendStatus(message, error = false) {
     let status = document.getElementById("sendStatus");
     if (!status) {
@@ -665,24 +560,24 @@
     };
     console.log("[v0] Sending POST to", `${API_ROOT}/yes`, payload);
     if (IS_FILE_PROTOCOL) {
-      setSendStatus("Сторінку відкрито з файлу. Відкрий через http://localhost:3000", true);
+      setSendStatus("Страница открыта из файла. Открой через http://localhost:3000", true);
     } else {
-      setSendStatus("Відправляється запит до сервера...");
+      setSendStatus("Отправляется запрос на сервер...");
     }
     try {
       const response = await fetch(`${API_ROOT}/yes`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const result = await response.json();
       console.log("[v0] /yes response", response.status, result);
       if (result.ok && result.telegram) {
-        setSendStatus("Повідомлення успішно надіслано у Telegram 🎉");
+        setSendStatus("Сообщение успешно отправлено в Telegram 🎉");
       } else {
         const errorText = result.error || `HTTP ${response.status}`;
-        setSendStatus(`Не вдалося надіслати повідомлення: ${errorText}`, true);
-        console.log("[v0] Надсилання Telegram не вдалося:", result.error || result);
+        setSendStatus(`Не удалось отправить сообщение: ${errorText}`, true);
+        console.log("[v0] Отправка Telegram не удалась:", result.error || result);
       }
     } catch (e) {
-      setSendStatus(`Помилка надсилання до сервера: ${e.message}`, true);
-      console.log("[v0] Помилка надсилання:", e.message);
+      setSendStatus(`Ошибка отправки на сервер: ${e.message}`, true);
+      console.log("[v0] Ошибка отправки:", e.message);
     }
   }
   function detectBrowser(ua) {
@@ -691,7 +586,7 @@
     if (/Chrome/i.test(ua)) return "Chrome";
     if (/Firefox/i.test(ua)) return "Firefox";
     if (/Safari/i.test(ua)) return "Safari";
-    return "Інший";
+    return "Другой";
   }
   function detectOS(ua) {
     if (/Windows/i.test(ua)) return "Windows";
@@ -699,65 +594,9 @@
     if (/iPhone|iPad|iOS/i.test(ua)) return "iOS";
     if (/Mac/i.test(ua)) return "macOS";
     if (/Linux/i.test(ua)) return "Linux";
-    return "Інша";
+    return "Другой";
   }
 
-  // ================= МУЗИЧНИЙ ПЛЕЄР =================
-  const audio = document.getElementById("audio");
-  const musicToggle = document.getElementById("musicToggle");
-  const equalizer = document.getElementById("equalizer");
-  function tryPlayMusic() {
-    if (!config.music) return;
-    audio.src = config.music;
-    audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
-  }
-  function setPlaying(on) {
-    musicToggle.textContent = on ? "❚❚" : "▶";
-    equalizer.classList.toggle("playing", on);
-  }
-  musicToggle.addEventListener("click", () => {
-    if (!audio.src) { alert("Додай посилання на музику в секції «Налаштування» 🎵"); return; }
-    if (audio.paused) { audio.play(); setPlaying(true); } else { audio.pause(); setPlaying(false); }
-  });
-
-  // ================= ПОГОДА (Open-Meteo, без ключа) =================
-  const weatherCodes = {
-    0: "Ясно", 1: "Переважно ясно", 2: "Мінлива хмарність", 3: "Хмарно",
-    45: "Туман", 48: "Паморозь", 51: "Мряка", 61: "Дощ", 63: "Дощ", 65: "Сильний дощ",
-    71: "Сніг", 73: "Сніг", 75: "Сильний сніг", 80: "Зливи", 95: "Гроза",
-  };
-  async function loadWeather(lat = 50.4501, lon = 30.5234) {
-    try {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m`;
-      const res = await fetch(url);
-      const d = await res.json();
-      const c = d.current;
-      document.getElementById("wTemp").textContent = Math.round(c.temperature_2m) + "°";
-      document.getElementById("wDesc").textContent = weatherCodes[c.weather_code] || "—";
-      document.getElementById("wFeels").textContent = Math.round(c.apparent_temperature) + "°";
-      document.getElementById("wWind").textContent = Math.round(c.wind_speed_10m) + " км/год";
-    } catch (e) {
-      document.getElementById("wDesc").textContent = "Не вдалося завантажити";
-    }
-  }
-  loadWeather();
-
-  // ================= ЗАСТОСУВАННЯ НАЛАШТУВАНЬ =================
-  document.getElementById("cfgApply").addEventListener("click", () => {
-    config.her = document.getElementById("cfgHer").value || config.her;
-    config.him = document.getElementById("cfgHim").value || config.him;
-    config.startDate = document.getElementById("cfgDate").value || config.startDate;
-    config.music = document.getElementById("cfgMusic").value.trim();
-    config.place = document.getElementById("cfgPlace").value || config.place;
-
-    document.getElementById("heroName").textContent = config.her;
-    document.getElementById("mapFrame").src = "https://www.google.com/maps?q=" + encodeURIComponent(config.place) + "&output=embed";
-    document.getElementById("wCity").textContent = config.place;
-    updateTimer();
-    if (config.music) tryPlayMusic();
-
-    gsap.fromTo("#cfgApply", { scale: 1 }, { scale: 1.1, duration: 0.15, yoyo: true, repeat: 1 });
-  });
 </script>
 </body>
 </html>
