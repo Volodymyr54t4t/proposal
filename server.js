@@ -38,8 +38,11 @@ function normalizeIp(ip) {
   return ip
 }
 function getClientIp(req) {
-  const forwarded = req.headers["x-forwarded-for"]
-  if (forwarded) return normalizeIp(forwarded.split(",")[0].trim())
+  const forwarded = req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || req.headers["cf-connecting-ip"]
+  if (forwarded) {
+    const first = forwarded.split(",")[0].trim()
+    return normalizeIp(first)
+  }
   return normalizeIp(req.socket?.remoteAddress) || "невідомо"
 }
 function isPrivateIp(ip) {
