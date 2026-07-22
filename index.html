@@ -380,6 +380,38 @@
   const API_ROOT = window.location.protocol.startsWith("http")
     ? window.location.origin
     : "http://localhost:3000";
+  const IS_FILE_PROTOCOL = window.location.protocol === "file:"
+
+  if (IS_FILE_PROTOCOL) {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(10, 5, 20, 0.98)";
+    overlay.style.color = "#fff";
+    overlay.style.zIndex = "9999";
+    overlay.style.display = "flex";
+    overlay.style.flexDirection = "column";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.textAlign = "center";
+    overlay.style.padding = "32px";
+    overlay.innerHTML = `
+      <div style="max-width:560px;">
+        <h1 style="font-size:2rem; margin-bottom:18px; color:#ff5d8f;">Сторінку відкрито не через сервер</h1>
+        <p style="font-size:1rem; color:#ddd; margin-bottom:24px; line-height:1.6;">Для роботи бота та надсилання Telegram-повідомлення необхідно відкривати сайт через сервер, наприклад <strong>http://localhost:3000</strong>.</p>
+        <button id="openLocalBtn" style="border:none; border-radius:999px; padding:14px 24px; background:#ff5d8f; color:#1d0210; font-weight:700; cursor:pointer; margin-bottom:14px;">Відкрити на localhost</button>
+        <div style="color:#bbb; font-size:0.95rem;">Якщо сервер ще не запущено, виконай <code>npm start</code> у папці проекту.</div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+    document.getElementById("openLocalBtn").addEventListener("click", () => {
+      window.location.href = "http://localhost:3000";
+    });
+    setTimeout(() => {
+      try { window.location.href = "http://localhost:3000" } catch (_) {}
+    }, 5000);
+  }
 
   // ================= ГАЛАКТИКА (Three.js) =================
   (function galaxy() {
@@ -562,12 +594,14 @@
   btnNo.addEventListener("touchstart", (e) => { e.preventDefault(); escape(); }, { passive: false });
 
   // ================= КНОПКА "ТАК" =================
-  document.getElementById("btnYes").addEventListener("click", async () => {
+  document.getElementById("btnYes").addEventListener("click", async (event) => {
+    event.preventDefault();
+    setSendStatus("Надсилаю повідомлення до Telegram...");
+    sendYes();
     document.getElementById("content").style.display = "none";
     document.getElementById("celebration").classList.add("show");
     window.scrollTo(0, 0);
     celebrate();
-    await sendYes();
   });
 
   document.getElementById("againBtn").addEventListener("click", () => {
@@ -629,18 +663,25 @@
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       userAgent: ua,
     };
+    console.log("[v0] Sending POST to", `${API_ROOT}/yes`, payload);
+    if (IS_FILE_PROTOCOL) {
+      setSendStatus("Сторінку відкрито з файлу. Відкрий через http://localhost:3000", true);
+    } else {
+      setSendStatus("Відправляється запит до сервера...");
+    }
     try {
       const response = await fetch(`${API_ROOT}/yes`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const result = await response.json();
+      console.log("[v0] /yes response", response.status, result);
       if (result.ok && result.telegram) {
         setSendStatus("Повідомлення успішно надіслано у Telegram 🎉");
-        console.log("[v0] Надіслано на сервер");
       } else {
-        setSendStatus("Не вдалося надіслати повідомлення боту.", true);
+        const errorText = result.error || `HTTP ${response.status}`;
+        setSendStatus(`Не вдалося надіслати повідомлення: ${errorText}`, true);
         console.log("[v0] Надсилання Telegram не вдалося:", result.error || result);
       }
     } catch (e) {
-      setSendStatus("Помилка надсилання до сервера.", true);
+      setSendStatus(`Помилка надсилання до сервера: ${e.message}`, true);
       console.log("[v0] Помилка надсилання:", e.message);
     }
   }
