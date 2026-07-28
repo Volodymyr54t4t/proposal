@@ -1,602 +1,562 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#0a0514" />
-<title>Лера, я люблю тебя ❤️</title>
-<meta name="description" content="Романтический сюрприз для Леры от Врвы" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#06020f" />
+  <title>Настя ❤️</title>
+  <meta name="description" content="М'який романтичний сайт для Насті" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg: #06020f;
+      --bg-2: #140722;
+      --pink: #ff6ca8;
+      --pink-soft: #ff9ad6;
+      --violet: #8b63ff;
+      --gold: #ffd4a8;
+      --text: #fbeefc;
+      --muted: #cdb8db;
+      --glass: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.16);
+    }
 
-<!-- Бібліотеки -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-  :root {
-    --bg: #0a0514;
-    --bg-2: #140a24;
-    --pink: #ff5d8f;
-    --pink-soft: #ff9ebb;
-    --gold: #ffd479;
-    --text: #fbeaf3;
-    --muted: #c9b6d4;
-    --glass: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.18);
-  }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at top left, #1b0a2f 0%, var(--bg) 45%, #04010a 100%);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+    }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    line-height: 1.6;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-  }
+    body::before {
+      background: radial-gradient(circle at 20% 20%, rgba(255,108,168,0.16), transparent 30%),
+                  radial-gradient(circle at 80% 30%, rgba(139,99,255,0.16), transparent 32%),
+                  radial-gradient(circle at 60% 80%, rgba(255,212,168,0.16), transparent 25%);
+      filter: blur(40px);
+    }
 
-  h1, h2, h3, .display {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
+    body::after {
+      background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    }
 
-  /* Фон: галактика (three.js) + аврора */
-  #galaxy-canvas {
-    position: fixed; inset: 0; z-index: -3;
-  }
-  .aurora {
-    position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
-  }
-  .aurora span {
-    position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35;
-    animation: drift 18s ease-in-out infinite;
-  }
-  .aurora .a1 { width: 480px; height: 480px; background: #ff5d8f; top: -120px; left: -80px; }
-  .aurora .a2 { width: 520px; height: 520px; background: #7b4bff; bottom: -160px; right: -100px; animation-delay: -6s; }
-  .aurora .a3 { width: 400px; height: 400px; background: #ffb35d; top: 40%; left: 55%; animation-delay: -12s; }
-  @keyframes drift {
-    0%, 100% { transform: translate(0,0) scale(1); }
-    50% { transform: translate(40px, -30px) scale(1.15); }
-  }
+    #stars-canvas, #hearts-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  /* Летающие сердечки */
-  #hearts-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    #app {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
 
-  /* Загальна секція */
-  section {
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 80px 20px; position: relative; text-align: center;
-  }
+    .page {
+      width: min(860px, 100%);
+      min-height: min(760px, 92vh);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 28px;
+    }
 
-  .glass {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-  }
+    .page.active {
+      display: flex;
+    }
 
-  /* Интро */
-  #intro {
-    position: fixed; inset: 0; z-index: 50;
-    background: radial-gradient(circle at 50% 40%, #1b0e33, #05030c 80%);
-    display: flex; align-items: center; justify-content: center; flex-direction: column;
-  }
-  #intro .intro-title {
-    font-size: clamp(2rem, 8vw, 5rem);
-    background: linear-gradient(90deg, var(--pink-soft), var(--gold));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    opacity: 0;
-  }
-  #intro .intro-sub { color: var(--muted); margin-top: 16px; opacity: 0; font-size: 1.1rem; }
-  .enter-btn {
-    margin-top: 40px; padding: 16px 44px; font-size: 1.1rem; cursor: pointer;
-    border: none; border-radius: 999px; color: #2a0a18; font-weight: 700;
-    background: linear-gradient(90deg, var(--pink), var(--gold));
-    box-shadow: 0 10px 30px rgba(255,93,143,0.45); opacity: 0;
-    transition: transform 0.2s ease;
-  }
-  .enter-btn:hover { transform: scale(1.06); }
+    .card {
+      width: 100%;
+      padding: clamp(24px, 4vw, 48px);
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.42);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      position: relative;
+      overflow: hidden;
+    }
 
-  /* Заголовки секцій */
-  .section-title {
-    font-size: clamp(1.8rem, 5vw, 3rem);
-    background: linear-gradient(90deg, var(--pink-soft), var(--gold));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    margin-bottom: 12px;
-  }
-  .section-lead { color: var(--muted); max-width: 640px; margin: 0 auto 40px; }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(255,108,168,0.18), transparent 45%);
+      pointer-events: none;
+    }
 
-  /* Hero */
-  #hero .big-name {
-    font-size: clamp(2.5rem, 10vw, 6rem);
-    background: linear-gradient(90deg, #fff, var(--pink-soft), var(--gold));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .typewriter { min-height: 2.4em; font-size: clamp(1.1rem, 3vw, 1.6rem); color: var(--text); margin-top: 20px; }
-  .cursor { display: inline-block; width: 2px; background: var(--pink); margin-left: 2px; animation: blink 0.8s infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-  .scroll-hint { position: absolute; bottom: 30px; color: var(--muted); font-size: 0.9rem; animation: bob 1.6s ease-in-out infinite; }
-  @keyframes bob { 50% { transform: translateY(10px); } }
+    .eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
 
-  /* Таймер отношений */
-  .timer-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 20px; }
-  .timer-cell { padding: 22px 20px; min-width: 110px; }
-  .timer-cell .num { font-size: 2.4rem; font-weight: 700; color: var(--gold); }
-  .timer-cell .lbl { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+    h1, h2, p {
+      margin: 0;
+    }
 
-  /* Галерея */
-  .gallery { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; width: 100%; }
-  @media (min-width: 720px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
-  .gallery figure {
-    overflow: hidden; border-radius: 20px; position: relative; aspect-ratio: 3/4;
-    border: 1px solid var(--glass-border);
-  }
-  .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
-  .gallery figure:hover img { transform: scale(1.08); }
-  .gallery figcaption {
-    position: absolute; left: 0; right: 0; bottom: 0; padding: 16px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7)); font-size: 0.95rem;
-  }
+    .title {
+      font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+      line-height: 1.1;
+      margin-bottom: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff3fb;
+    }
 
-  /* Любовное письмо */
-  .letter {
-    max-width: 680px; padding: 40px; text-align: left; font-size: 1.1rem;
-    line-height: 1.9; color: var(--text);
-  }
-  .letter p { margin-bottom: 18px; }
-  .letter .sign { text-align: right; color: var(--gold); font-style: italic; }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--pink-soft), var(--gold), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
 
-  /* Предложение */
-  #proposal .ring { font-size: 4rem; margin-bottom: 10px; }
-  .proposal-buttons { display: flex; gap: 20px; margin-top: 36px; align-items: center; justify-content: center; position: relative; min-height: 80px; flex-wrap: wrap; }
-  .btn-yes {
-    padding: 18px 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; border: none;
-    border-radius: 999px; color: #2a0a18;
-    background: linear-gradient(90deg, var(--pink), var(--gold));
-    box-shadow: 0 12px 34px rgba(255,93,143,0.5); transition: transform 0.2s ease;
-  }
-  .btn-yes:hover { transform: scale(1.08); }
-  .btn-no {
-    padding: 16px 40px; font-size: 1.1rem; cursor: pointer; border-radius: 999px;
-    border: 1px solid var(--glass-border); background: var(--glass); color: var(--text);
-    transition: all 0.25s ease;
-  }
+    .lead {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto;
+    }
 
-  /* Празднование ДА */
-  #celebration { display: none; }
-  #celebration.show { display: flex; }
-  #celebration .yay {
-    font-size: clamp(2.5rem, 9vw, 5.5rem);
-    background: linear-gradient(90deg, var(--pink-soft), var(--gold));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .roses { font-size: 2.4rem; margin: 20px 0; letter-spacing: 8px; }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
 
-  .reveal { opacity: 0; transform: translateY(40px); }
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
 
-  footer { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 0.9rem; }
-</style>
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      padding: 14px 28px;
+      color: #22061b;
+      background: linear-gradient(90deg, var(--pink), var(--gold));
+      box-shadow: 0 16px 34px rgba(255,108,168,0.28);
+      font-size: 1rem;
+    }
+
+    .btn-secondary {
+      padding: 14px 24px;
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      font-size: 0.98rem;
+    }
+
+    .page-one .title { font-size: clamp(2.4rem, 6vw, 4rem); }
+
+    .page-two .story-block {
+      text-align: left;
+      display: grid;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .story-block p {
+      font-size: clamp(1rem, 2vw, 1.14rem);
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .chat-scene {
+      position: relative;
+      min-height: 440px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      padding: 20px;
+    }
+
+    .bubble {
+      position: absolute;
+      max-width: 320px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fffafc;
+      font-size: 0.96rem;
+      line-height: 1.55;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.16);
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+      animation: bubbleRise 1.4s cubic-bezier(.2,.8,.2,1) forwards;
+      animation-delay: var(--delay);
+    }
+
+    .bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -9px;
+      left: 24px;
+      width: 14px;
+      height: 14px;
+      background: inherit;
+      border-right: inherit;
+      border-bottom: inherit;
+      transform: rotate(45deg);
+    }
+
+    .bubble:nth-child(2n) { background: rgba(255,108,168,0.16); }
+
+    .bubble:nth-child(3n) { background: rgba(139,99,255,0.16); }
+
+    @keyframes bubbleRise {
+      0% { opacity: 0; transform: translateY(28px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .page-four {
+      text-align: center;
+    }
+
+    .question-block {
+      display: grid;
+      gap: 24px;
+      justify-items: center;
+    }
+
+    .final-copy {
+      font-size: clamp(1.05rem, 2.1vw, 1.3rem);
+      line-height: 1.95;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .question-title {
+      font-size: clamp(1.9rem, 3.7vw, 3rem);
+      line-height: 1.2;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .celebration {
+      display: none;
+      text-align: center;
+      gap: 18px;
+      padding-top: 6px;
+    }
+
+    .celebration.show {
+      display: grid;
+    }
+
+    .celebration .title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 0;
+    }
+
+    .hearts-icon { font-size: 2.3rem; letter-spacing: 0.3em; }
+
+    @media (max-width: 700px) {
+      .page { min-height: 100vh; padding: 16px; }
+      .card { padding: 22px; border-radius: 24px; }
+      .chat-scene { min-height: 380px; }
+      .bubble { max-width: 73%; font-size: 0.9rem; }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="stars-canvas"></canvas>
+  <canvas id="hearts-canvas"></canvas>
 
-<!-- Фон -->
-<canvas id="galaxy-canvas"></canvas>
-<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
-<canvas id="hearts-canvas"></canvas>
-
-<!-- Кинематографичное интро -->
-<div id="intro">
-    <div class="intro-title display" id="introTitle">Лера…</div>
-    <div class="intro-sub" id="introSub">есть кое-что, что я давно хочу тебе сказать</div>
-    <button class="enter-btn" id="enterBtn">Открыть ❤️</button>
-</div>
-
-<main id="content" style="display:none;">
-  <section id="hero">
-    <div class="scroll-hint">прокрути вниз ↓</div>
-    <p style="color:var(--muted); letter-spacing:3px; text-transform:uppercase; font-size:0.85rem;">Для самой дорогой</p>
-    <h1 class="big-name" id="heroName">Лера</h1>
-    <div class="typewriter"><span id="typed"></span><span class="cursor">&nbsp;</span></div>
-  </section>
-
-  <!-- Таймер отношений -->
-  <section id="timer">
-    <h2 class="section-title reveal">Мы вместе уже</h2>
-    <p class="section-lead reveal">Каждая секунда рядом с тобой — лучший подарок.</p>
-    <div class="timer-grid">
-      <div class="timer-cell glass reveal"><div class="num" id="t-days">0</div><div class="lbl">дней</div></div>
-      <div class="timer-cell glass reveal"><div class="num" id="t-hours">0</div><div class="lbl">часов</div></div>
-      <div class="timer-cell glass reveal"><div class="num" id="t-mins">0</div><div class="lbl">минут</div></div>
-      <div class="timer-cell glass reveal"><div class="num" id="t-secs">0</div><div class="lbl">секунд</div></div>
-    </div>
-  </section>
-
-  <!-- Галерея -->
-  <section id="gallery">
-    <h2 class="section-title reveal">Наши моменты</h2>
-    <p class="section-lead reveal">Несколько мгновений, что навсегда в моем сердце.</p>
-    <div class="gallery">
-      <figure class="reveal"><img src="/1.jpg" alt="Наше совместное фото 1" /><figcaption></figcaption></figure>
-      <figure class="reveal"><img src="/3.jpg" alt="Наше совместное фото 2" /><figcaption></figcaption></figure>
-      <figure class="reveal"><img src="/2.jpg" alt="Наше совместное фото 3" /><figcaption></figcaption></figure>
-    </div>
-  </section>
-
-  <!-- Любовное письмо -->
-  <section id="letter">
-    <h2 class="section-title reveal">Письмо для тебя</h2>
-    <div class="letter glass reveal">
-      <p>Любимая Лера,</p>
-      <p>С тех пор как ты появилась в моей жизни, каждый день стал ярче. Ты — моя улыбка утром и моя последняя мысль перед сном.</p>
-      <p>Ты делаешь меня лучше, ты вдохновляешь и согреваешь даже в самые холодные дни. Рядом с тобой я нашёл дом — не место, а ощущение.</p>
-      <p>Я хочу держать твою руку и в праздники, и в обычные дни, смеяться вместе и преодолевать любые трудности плечом к плечу.</p>
-      <p>Поэтому я приготовил это маленькое признание… и один важный вопрос.</p>
-      <p class="sign">Навсегда твой, Вова</p>
-    </div>
-  </section>
-
-  <!-- Предложение -->
-  <section id="proposal">
-    <div class="ring reveal">💍</div>
-    <h2 class="section-title reveal">Лера, ты будешь моей девушкой?</h2>
-    <p class="section-lead reveal">Я хочу провести с тобой всю жизнь. Что скажешь?</p>
-    <div class="proposal-buttons">
-      <button class="btn-yes" id="btnYes">ДА ❤️</button>
-      <button class="btn-no" id="btnNo">НЕТ</button>
-    </div>
-  </section>
-
-
-  <footer>Сделано с ❤️ для Леры · Вова</footer>
-</main>
-
-<!-- Празднование ДА -->
-<section id="celebration">
-  <div class="yay display">ВОНА СКАЗАЛА ТАК! 🎉</div>
-  <div class="roses">🌹🌹🌹🌹🌹</div>
-  <p class="section-lead">Лера, ты сделала меня самым счастливым человеком на свете. Я тебя люблю! ❤️</p>
-  <button class="btn-yes" id="againBtn" style="margin-top:20px;">Посмотреть снова</button>
-</section>
-
-<script>
-  // ================= КОНФІГУРАЦІЯ =================
-  const config = {
-    her: "Лера",
-    him: "Вова",
-    startDate: "2026-07-19",
-    music: "", // Вставь ссылку на mp3 вручную, если хочешь музыку
-    place: "Москва, Россия",
-    photos: ["/1.jpg", "/2.jpg", "/3.jpg"],
-  };
-
-  const API_ROOT = window.location.protocol.startsWith("http")
-    ? window.location.origin
-    : "http://localhost:3000";
-  const IS_FILE_PROTOCOL = window.location.protocol === "file:"
-
-  if (IS_FILE_PROTOCOL) {
-    const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.inset = "0";
-    overlay.style.background = "rgba(10, 5, 20, 0.98)";
-    overlay.style.color = "#fff";
-    overlay.style.zIndex = "9999";
-    overlay.style.display = "flex";
-    overlay.style.flexDirection = "column";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.textAlign = "center";
-    overlay.style.padding = "32px";
-    overlay.innerHTML = `
-      <div style="max-width:560px;">
-        <h1 style="font-size:2rem; margin-bottom:18px; color:#ff5d8f;">Страница открыта не через сервер</h1>
-        <p style="font-size:1rem; color:#ddd; margin-bottom:24px; line-height:1.6;">Для работы бота и отправки Telegram-сообщения открой сайт через сервер, например <strong>http://localhost:3000</strong>.</p>
-        <button id="openLocalBtn" style="border:none; border-radius:999px; padding:14px 24px; background:#ff5d8f; color:#1d0210; font-weight:700; cursor:pointer; margin-bottom:14px;">Открыть на localhost</button>
-        <div style="color:#bbb; font-size:0.95rem;">Если сервер еще не запущен, запусти <code>npm start</code> в папке проекта.</div>
+  <main id="app">
+    <section class="page page-one active">
+      <div class="card">
+        <p class="eyebrow">для особливої людини</p>
+        <h1 class="title">Привіт, Настя ❤️</h1>
+        <p class="lead">Сьогодні о 18:05 почалася наша історія.<br />Можливо, вона тільки починається.<br />Але вже зараз мені захотілося зробити для тебе щось особливе.</p>
+        <div class="button-row">
+          <button class="btn-primary" id="nextOne">Продовжити</button>
+        </div>
       </div>
-    `;
-    document.body.appendChild(overlay);
-    document.body.style.overflow = "hidden";
-    document.getElementById("openLocalBtn").addEventListener("click", () => {
-      window.location.href = "http://localhost:3000";
-    });
-    setTimeout(() => {
-      try { window.location.href = "http://localhost:3000" } catch (_) {}
-    }, 5000);
-  }
+    </section>
 
-  // ================= ГАЛАКТИКА (Three.js) =================
-  (function galaxy() {
-    const canvas = document.getElementById("galaxy-canvas");
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    <section class="page page-two">
+      <div class="card">
+        <p class="eyebrow">ще один момент</p>
+        <div class="story-block">
+          <p>Коли ми почали спілкуватися, я навіть не думав, що звичайне повідомлення може так швидко підняти мені настрій.</p>
+          <p>Мені дуже подобається знайомитися з тобою ближче.</p>
+        </div>
+        <div class="button-row">
+          <button class="btn-primary" id="nextTwo">Продовжити</button>
+        </div>
+      </div>
+    </section>
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+    <section class="page page-three">
+      <div class="card">
+        <p class="eyebrow">наші слова</p>
+        <div class="chat-scene" id="chatScene"></div>
+        <div class="button-row">
+          <button class="btn-primary" id="nextThree">Продовжити</button>
+        </div>
+      </div>
+    </section>
 
-    const count = 6000;
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const palette = [
-      [1.0, 0.36, 0.56],
-      [1.0, 0.83, 0.47],
-      [0.55, 0.4, 1.0],
-      [1.0, 1.0, 1.0],
-    ];
-    for (let i = 0; i < count; i++) {
-      const r = Math.random() * 8 + 0.5;
-      const a = Math.random() * Math.PI * 2;
-      const b = (Math.random() - 0.5) * 2;
-      positions[i*3] = Math.cos(a) * r;
-      positions[i*3+1] = b * (Math.random() * 3);
-      positions[i*3+2] = Math.sin(a) * r;
-      const c = palette[Math.floor(Math.random() * palette.length)];
-      colors[i*3] = c[0]; colors[i*3+1] = c[1]; colors[i*3+2] = c[2];
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending });
-    const points = new THREE.Points(geo, mat);
-    scene.add(points);
+    <section class="page page-four">
+      <div class="card">
+        <div class="question-block">
+          <p class="eyebrow">одне питання</p>
+          <p class="final-copy" id="finalCopy">Настя...<br /><br />Я не хочу поспішати.<br /><br />Але мені дуже хочеться продовжити знайомитися з тобою.<br /><br />І тому хочу поставити лише одне питання...</p>
+          <h2 class="question-title gradient-text" id="questionTitle">Ти будеш моєю дівчиною? ❤️</h2>
+          <div class="button-row">
+            <button class="btn-primary" id="yesBtn">❤️ Так</button>
+            <button class="btn-secondary" id="laterBtn">😊 Давай ще поспілкуємось</button>
+          </div>
+          <div class="celebration" id="celebration">
+            <div class="hearts-icon">💗💗💗</div>
+            <h3 class="title gradient-text">Обіцяю зробити все, щоб ти усміхалася частіше ❤️</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    let mx = 0, my = 0;
-    window.addEventListener("mousemove", (e) => {
-      mx = (e.clientX / window.innerWidth - 0.5) * 0.6;
-      my = (e.clientY / window.innerHeight - 0.5) * 0.6;
-    });
+  <script>
+    const pages = Array.from(document.querySelectorAll('.page'));
+    let currentIndex = 0;
 
-    function animate() {
-      requestAnimationFrame(animate);
-      points.rotation.y += 0.0009;
-      points.rotation.x += 0.0004;
-      camera.position.x += (mx - camera.position.x) * 0.03;
-      camera.position.y += (-my - camera.position.y) * 0.03;
-      camera.lookAt(scene.position);
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    window.addEventListener("resize", () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  })();
-
-  // ================= ЛЕТАЮЩИЕ СЕРДЕЧКИ =================
-  (function hearts() {
-    const canvas = document.getElementById("hearts-canvas");
-    const ctx = canvas.getContext("2d");
-    let w, h, list = [];
-    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-    resize();
-    window.addEventListener("resize", resize);
-    function make() {
-      return { x: Math.random()*w, y: h + 20, size: Math.random()*14+8, speed: Math.random()*1+0.5, alpha: Math.random()*0.4+0.2, sway: Math.random()*2-1 };
-    }
-    for (let i = 0; i < 30; i++) { const p = make(); p.y = Math.random()*h; list.push(p); }
-    function heart(x, y, s, alpha) {
-      ctx.save(); ctx.translate(x, y); ctx.scale(s/16, s/16); ctx.globalAlpha = alpha;
-      ctx.beginPath();
-      ctx.moveTo(0, 4);
-      ctx.bezierCurveTo(-8, -6, -16, 4, 0, 14);
-      ctx.bezierCurveTo(16, 4, 8, -6, 0, 4);
-      ctx.fillStyle = "#ff5d8f"; ctx.fill(); ctx.restore();
-    }
-    function loop() {
-      ctx.clearRect(0,0,w,h);
-      list.forEach((p) => {
-        p.y -= p.speed; p.x += p.sway * 0.3;
-        if (p.y < -30) Object.assign(p, make());
-        heart(p.x, p.y, p.size, p.alpha);
-      });
-      requestAnimationFrame(loop);
-    }
-    loop();
-  })();
-
-  // ================= ИНТРО =================
-  const tl = gsap.timeline();
-  tl.to("#introTitle", { opacity: 1, y: -10, duration: 1.4, ease: "power3.out" })
-    .to("#introSub", { opacity: 1, duration: 1.2 }, "-=0.4")
-    .to("#enterBtn", { opacity: 1, duration: 1 }, "-=0.3");
-
-  document.getElementById("enterBtn").addEventListener("click", () => {
-    gsap.to("#intro", { opacity: 0, duration: 0.8, onComplete: () => {
-      document.getElementById("intro").style.display = "none";
-      document.getElementById("content").style.display = "block";
-      startTypewriter();
-      initReveal();
-    }});
-  });
-
-  // ================= ТАЙПРАЙТЕР =================
-  function startTypewriter() {
-    const phrases = [
-      "ты — моё лучшее «да» в жизни…",
-      "с тобой даже обычные дни становятся праздником.",
-      "хочу быть рядом всегда.",
-      "листаем дальше, у меня есть вопрос ❤️",
-    ];
-    const el = document.getElementById("typed");
-    let pi = 0, ci = 0, deleting = false;
-    function tick() {
-      const cur = phrases[pi];
-      el.textContent = cur.slice(0, ci);
-      if (!deleting && ci < cur.length) { ci++; setTimeout(tick, 55); }
-      else if (!deleting && ci === cur.length) { deleting = true; setTimeout(tick, 1600); }
-      else if (deleting && ci > 0) { ci--; setTimeout(tick, 25); }
-      else { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 300); }
-    }
-    tick();
-  }
-
-  // ================= ПОЯВЛЕНИЕ ПРИ ПРОКРУТКЕ =================
-  function initReveal() {
-    const els = document.querySelectorAll(".reveal");
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          gsap.to(e.target, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" });
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    els.forEach((el) => io.observe(el));
-  }
-
-  // ================= ТАЙМЕР ОТНОШЕНИЙ =================
-  function updateTimer() {
-    const start = new Date(config.startDate + "T00:00:00");
-    let diff = Math.max(0, Date.now() - start.getTime());
-    const days = Math.floor(diff / 86400000); diff -= days*86400000;
-    const hours = Math.floor(diff / 3600000); diff -= hours*3600000;
-    const mins = Math.floor(diff / 60000); diff -= mins*60000;
-    const secs = Math.floor(diff / 1000);
-    document.getElementById("t-days").textContent = days;
-    document.getElementById("t-hours").textContent = hours;
-    document.getElementById("t-mins").textContent = mins;
-    document.getElementById("t-secs").textContent = secs;
-  }
-  setInterval(updateTimer, 1000); updateTimer();
-
-  // ================= КНОПКА "НЕТ", КОТОРАЯ УБЕГАЕТ =================
-  const btnNo = document.getElementById("btnNo");
-  const noPhrases = ["Нет", "Точно?", "Подумай еще!", "А если да?", "Не убежишь 😅", "Ну пожалуйста ❤️", "Попробуй поймать!"];
-  let noIdx = 0;
-  function escape() {
-    noIdx = (noIdx + 1) % noPhrases.length;
-    btnNo.textContent = noPhrases[noIdx];
-    const maxX = window.innerWidth - btnNo.offsetWidth - 30;
-    const maxY = window.innerHeight - btnNo.offsetHeight - 30;
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    btnNo.style.position = "fixed";
-    btnNo.style.left = x + "px";
-    btnNo.style.top = y + "px";
-    gsap.fromTo(btnNo, { scale: 1 }, { scale: 0.9, duration: 0.15, yoyo: true, repeat: 1 });
-  }
-  btnNo.addEventListener("mouseenter", escape);
-  btnNo.addEventListener("click", (e) => { e.preventDefault(); escape(); });
-  btnNo.addEventListener("touchstart", (e) => { e.preventDefault(); escape(); }, { passive: false });
-
-  // ================= КНОПКА "ДА" =================
-  document.getElementById("btnYes").addEventListener("click", async (event) => {
-    event.preventDefault();
-    setSendStatus("Надсилаю повідомлення до Telegram...");
-    sendYes();
-    document.getElementById("content").style.display = "none";
-    document.getElementById("celebration").classList.add("show");
-    window.scrollTo(0, 0);
-    celebrate();
-  });
-
-  document.getElementById("againBtn").addEventListener("click", () => {
-    document.getElementById("celebration").classList.remove("show");
-    document.getElementById("content").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  // ================= ФЕЄРВЕРКИ / КОНФЕТІ =================
-  function celebrate() {
-    const end = Date.now() + 6000;
-    (function frame() {
-      confetti({ particleCount: 5, angle: 60, spread: 65, origin: { x: 0 }, colors: ["#ff5d8f", "#ffd479", "#ff9ebb"] });
-      confetti({ particleCount: 5, angle: 120, spread: 65, origin: { x: 1 }, colors: ["#ff5d8f", "#ffd479", "#ff9ebb"] });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    })();
-    // Феєрверки
-    const fw = setInterval(() => {
-      confetti({ particleCount: 60, spread: 360, startVelocity: 30, origin: { x: Math.random(), y: Math.random() * 0.5 }, colors: ["#ff5d8f", "#ffd479", "#ff9ebb", "#7b4bff"] });
-    }, 700);
-    setTimeout(() => clearInterval(fw), 6000);
-  }
-
-  // ================= ОТПРАВКА В TELEGRAM =================
-  function setSendStatus(message, error = false) {
-    let status = document.getElementById("sendStatus");
-    if (!status) {
-      status = document.createElement("div");
-      status.id = "sendStatus";
-      status.style.position = "fixed";
-      status.style.bottom = "20px";
-      status.style.left = "20px";
-      status.style.padding = "14px 18px";
-      status.style.borderRadius = "18px";
-      status.style.zIndex = 100;
-      status.style.fontSize = "0.95rem";
-      status.style.backdropFilter = "blur(12px)";
-      status.style.background = "rgba(10, 5, 20, 0.9)";
-      status.style.color = "#fff";
-      status.style.boxShadow = "0 14px 30px rgba(0,0,0,0.35)";
-      document.body.appendChild(status);
-    }
-    status.textContent = message;
-    status.style.border = error ? "1px solid #ff5d8f" : "1px solid #7b4bff";
-    status.style.opacity = "1";
-    clearTimeout(status.dismissTimeout);
-    status.dismissTimeout = setTimeout(() => {
-      status.style.opacity = "0";
-    }, 4500);
-  }
-
-  async function sendYes() {
-    const ua = navigator.userAgent;
-    const payload = {
-      browser: detectBrowser(ua),
-      os: detectOS(ua),
-      device: /Mobi|Android|iPhone|iPad/i.test(ua) ? "Мобільний" : "Комп'ютер",
-      language: navigator.language,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      userAgent: ua,
-    };
-    console.log("[v0] Sending POST to", `${API_ROOT}/yes`, payload);
-    if (IS_FILE_PROTOCOL) {
-      setSendStatus("Страница открыта из файла. Открой через http://localhost:3000", true);
-    } else {
-      setSendStatus("Отправляется запрос на сервер...");
-    }
-    try {
-      const response = await fetch(`${API_ROOT}/yes`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-      const result = await response.json();
-      console.log("[v0] /yes response", response.status, result);
-      if (result.ok && result.telegram) {
-        setSendStatus("Сообщение успешно отправлено в Telegram 🎉");
-      } else {
-        const errorText = result.error || `HTTP ${response.status}`;
-        setSendStatus(`Не удалось отправить сообщение: ${errorText}`, true);
-        console.log("[v0] Отправка Telegram не удалась:", result.error || result);
+    function showPage(index) {
+      pages.forEach((page, i) => page.classList.toggle('active', i === index));
+      currentIndex = index;
+      if (index === 3) {
+        setTimeout(() => {
+          gsap.to('#finalCopy', { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' });
+          gsap.to('#questionTitle', { opacity: 1, y: 0, duration: 1, delay: 0.35, ease: 'power3.out' });
+        }, 700);
       }
-    } catch (e) {
-      setSendStatus(`Ошибка отправки на сервер: ${e.message}`, true);
-      console.log("[v0] Ошибка отправки:", e.message);
     }
-  }
-  function detectBrowser(ua) {
-    if (/Edg/i.test(ua)) return "Edge";
-    if (/OPR|Opera/i.test(ua)) return "Opera";
-    if (/Chrome/i.test(ua)) return "Chrome";
-    if (/Firefox/i.test(ua)) return "Firefox";
-    if (/Safari/i.test(ua)) return "Safari";
-    return "Другой";
-  }
-  function detectOS(ua) {
-    if (/Windows/i.test(ua)) return "Windows";
-    if (/Android/i.test(ua)) return "Android";
-    if (/iPhone|iPad|iOS/i.test(ua)) return "iOS";
-    if (/Mac/i.test(ua)) return "macOS";
-    if (/Linux/i.test(ua)) return "Linux";
-    return "Другой";
-  }
 
-</script>
+    document.getElementById('nextOne').addEventListener('click', () => showPage(1));
+    document.getElementById('nextTwo').addEventListener('click', () => showPage(2));
+    document.getElementById('nextThree').addEventListener('click', () => showPage(3));
+
+    const chatMessages = [
+      'Ты очень очень красивая',
+      'спасибо большое)',
+      'Программирование и кикбоксинг',
+      'я люблю всякие бьюти штуки...',
+      'внешне ты симпатичный, а как человек ещё думаю'
+    ];
+
+    const chatScene = document.getElementById('chatScene');
+    chatMessages.forEach((text, index) => {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      bubble.style.setProperty('--delay', `${index * 0.18}s`);
+      bubble.style.top = `${18 + (index % 3) * 22}%`;
+      bubble.style.left = index % 2 === 0 ? '8%' : '36%';
+      if (index === 4) bubble.style.left = '20%';
+      chatScene.appendChild(bubble);
+    });
+
+    const yesBtn = document.getElementById('yesBtn');
+    const laterBtn = document.getElementById('laterBtn');
+    const celebration = document.getElementById('celebration');
+
+    yesBtn.addEventListener('click', async () => {
+      yesBtn.disabled = true;
+      laterBtn.disabled = true;
+      setToast('Надсилаю відповідь у Telegram...');
+      celebration.classList.add('show');
+      gsap.fromTo(celebration, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' });
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      celebrate();
+      await sendYes();
+    });
+
+    laterBtn.addEventListener('click', () => {
+      const offsetX = Math.round((Math.random() * 70) - 35);
+      const offsetY = Math.round((Math.random() * 40) - 20);
+      laterBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      gsap.fromTo(laterBtn, { scale: 1 }, { scale: 0.96, duration: 0.14, yoyo: true, repeat: 1, ease: 'power1.inOut' });
+    });
+
+    async function sendYes() {
+      try {
+        const response = await fetch('/yes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userAgent: navigator.userAgent })
+        });
+        const json = await response.json();
+        if (json.ok && json.telegram) {
+          setToast('Відповідь успішно надіслана ❤️');
+        } else {
+          setToast('Не вдалося надіслати повідомлення. Перевір сервер.', true);
+          console.warn('Telegram send failed', json);
+        }
+      } catch (error) {
+        setToast('Помилка відправки: ' + error.message, true);
+        console.error(error);
+      }
+    }
+
+    function setToast(message, error = false) {
+      let toast = document.getElementById('toastMessage');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toastMessage';
+        toast.style.position = 'fixed';
+        toast.style.left = '50%';
+        toast.style.bottom = '30px';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.padding = '14px 22px';
+        toast.style.borderRadius = '999px';
+        toast.style.fontSize = '0.95rem';
+        toast.style.backdropFilter = 'blur(14px)';
+        toast.style.background = 'rgba(6, 2, 15, 0.92)';
+        toast.style.color = '#fff';
+        toast.style.boxShadow = '0 18px 45px rgba(0, 0, 0, 0.25)';
+        toast.style.zIndex = 20;
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.style.background = error ? 'rgba(221, 86, 129, 0.96)' : 'rgba(37, 17, 66, 0.95)';
+      toast.style.opacity = '1';
+      toast.style.transform = 'translate(-50%, 0)';
+      clearTimeout(toast.dismissTimeout);
+      toast.dismissTimeout = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, 12px)';
+      }, 4200);
+    }
+
+    function celebrate() {
+      const bursts = setInterval(() => {
+        confetti({ particleCount: 28, angle: 60, spread: 70, origin: { x: 0.02 }, colors: ['#ff6ca8', '#ffd4a8', '#8b63ff'] });
+        confetti({ particleCount: 28, angle: 120, spread: 70, origin: { x: 0.98 }, colors: ['#ff6ca8', '#ffd4a8', '#8b63ff'] });
+      }, 400);
+      setTimeout(() => clearInterval(bursts), 3200);
+    }
+
+    // stars animation
+    const starsCanvas = document.getElementById('stars-canvas');
+    const starsCtx = starsCanvas.getContext('2d');
+    let stars = [];
+
+    function resizeStars() {
+      starsCanvas.width = window.innerWidth;
+      starsCanvas.height = window.innerHeight;
+      stars = Array.from({ length: 110 }, () => ({
+        x: Math.random() * starsCanvas.width,
+        y: Math.random() * starsCanvas.height,
+        r: Math.random() * 1.6 + 0.4,
+        a: Math.random() * 0.7 + 0.2,
+        s: Math.random() * 0.2 + 0.04
+      }));
+    }
+
+    function drawStars() {
+      starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+      stars.forEach(star => {
+        star.y += star.s;
+        if (star.y > starsCanvas.height + 6) star.y = -6;
+        starsCtx.beginPath();
+        starsCtx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        starsCtx.fillStyle = `rgba(255,255,255,${star.a})`;
+        starsCtx.fill();
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener('resize', resizeStars);
+    resizeStars();
+    drawStars();
+
+    // floating hearts
+    const heartsCanvas = document.getElementById('hearts-canvas');
+    const heartsCtx = heartsCanvas.getContext('2d');
+    let heartParticles = [];
+
+    function resizeHearts() {
+      heartsCanvas.width = window.innerWidth;
+      heartsCanvas.height = window.innerHeight;
+      heartParticles = Array.from({ length: 24 }, () => ({
+        x: Math.random() * heartsCanvas.width,
+        y: Math.random() * heartsCanvas.height,
+        size: Math.random() * 12 + 8,
+        speed: Math.random() * 0.35 + 0.12,
+        sway: Math.random() * 0.8 - 0.4,
+        alpha: Math.random() * 0.35 + 0.18
+      }));
+    }
+
+    function drawHearts() {
+      heartsCtx.clearRect(0, 0, heartsCanvas.width, heartsCanvas.height);
+      heartParticles.forEach(part => {
+        part.y -= part.speed;
+        part.x += part.sway;
+        if (part.y < -20) {
+          part.y = heartsCanvas.height + 16;
+          part.x = Math.random() * heartsCanvas.width;
+        }
+        heartsCtx.save();
+        heartsCtx.globalAlpha = part.alpha;
+        heartsCtx.translate(part.x, part.y);
+        heartsCtx.scale(part.size / 16, part.size / 16);
+        heartsCtx.beginPath();
+        heartsCtx.moveTo(0, 4);
+        heartsCtx.bezierCurveTo(-8, -6, -16, 4, 0, 14);
+        heartsCtx.bezierCurveTo(16, 4, 8, -6, 0, 4);
+        heartsCtx.fillStyle = '#ff6ca8';
+        heartsCtx.fill();
+        heartsCtx.restore();
+      });
+      requestAnimationFrame(drawHearts);
+    }
+
+    window.addEventListener('resize', resizeHearts);
+    resizeHearts();
+    drawHearts();
+
+    gsap.from('.page-one .card', { y: 14, opacity: 0, duration: 1, ease: 'power3.out' });
+  </script>
 </body>
 </html>
+
