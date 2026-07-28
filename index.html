@@ -411,8 +411,12 @@
     laterBtn.addEventListener('click', () => {
       const offsetX = Math.round((Math.random() * 70) - 35);
       const offsetY = Math.round((Math.random() * 40) - 20);
-      laterBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      gsap.fromTo(laterBtn, { scale: 1 }, { scale: 0.96, duration: 0.14, yoyo: true, repeat: 1, ease: 'power1.inOut' });
+      laterBtn.textContent = 'Подумай...';
+      laterBtn.style.pointerEvents = 'none';
+      gsap.to(laterBtn, { x: offsetX, y: offsetY, duration: 0.28, ease: 'power3.out' });
+      gsap.to(laterBtn, { opacity: 0, scale: 0.85, duration: 0.5, delay: 0.2, ease: 'power3.in', onComplete: () => {
+        laterBtn.style.display = 'none';
+      }});
     });
 
     async function sendYes() {
