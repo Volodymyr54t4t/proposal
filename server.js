@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next()
 })
 
-// Статичні файли: index.html, фото 1.jpg, 2.jpg, 3.jpg, музика тощо
+// Статичні файли: index.html, музика тощо
 app.use(express.static(path.join(__dirname)))
 app.use(express.static(path.join(__dirname, "public")))
 
