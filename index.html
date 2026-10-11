@@ -1,566 +1,152 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#06020f" />
-  <title>Соня ❤️</title>
-  <meta name="description" content="М'який романтичний сайт для Соні" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#190d19" />
+  <title>Соня, у меня есть вопрос ❤️</title>
+  <meta name="description" content="Маленький вопрос для особенной девушки." />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js" defer></script>
   <style>
-    :root {
-      --bg: #06020f;
-      --bg-2: #140722;
-      --pink: #ff6ca8;
-      --pink-soft: #ff9ad6;
-      --violet: #8b63ff;
-      --gold: #ffd4a8;
-      --text: #fbeefc;
-      --muted: #cdb8db;
-      --glass: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.16);
+    :root { color-scheme: dark; --cream: #fff4e9; --rose: #f6a6a8; --muted: #d7c4c5; }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; }
+    body {
+      min-height: 100vh; margin: 0; overflow-x: hidden; display: grid; place-items: center;
+      padding: 24px; color: var(--cream); font-family: Georgia, "Times New Roman", serif;
+      background: radial-gradient(ellipse at 50% 38%, #583343 0%, #301c2a 36%, #190d19 76%, #100a12 100%);
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      background: radial-gradient(circle at top left, #1b0a2f 0%, var(--bg) 45%, #04010a 100%);
-      color: var(--text);
-      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow: hidden;
-    }
-
-    body::before, body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::before {
-      background: radial-gradient(circle at 20% 20%, rgba(255,108,168,0.16), transparent 30%),
-                  radial-gradient(circle at 80% 30%, rgba(139,99,255,0.16), transparent 32%),
-                  radial-gradient(circle at 60% 80%, rgba(255,212,168,0.16), transparent 25%);
-      filter: blur(40px);
-    }
-
-    body::after {
-      background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 54px 54px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-    }
-
-    #stars-canvas, #hearts-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    #app {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-
-    .page {
-      width: min(860px, 100%);
-      min-height: min(760px, 92vh);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding: 28px;
-    }
-
-    .page.active {
-      display: flex;
-    }
-
-    .card {
-      width: 100%;
-      padding: clamp(24px, 4vw, 48px);
-      border-radius: 30px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
-      border: 1px solid var(--border);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.42);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(255,108,168,0.18), transparent 45%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      font-size: 0.78rem;
-      letter-spacing: 0.34em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-
-    h1, h2, p {
-      margin: 0;
-    }
-
-    .title {
-      font-size: clamp(2.1rem, 4.4vw, 3.4rem);
-      line-height: 1.1;
-      margin-bottom: 18px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #fff3fb;
-    }
-
-    .gradient-text {
-      background: linear-gradient(90deg, var(--pink-soft), var(--gold), var(--pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .lead {
-      font-size: clamp(1rem, 2vw, 1.18rem);
-      line-height: 1.8;
-      color: var(--muted);
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
-    .button-row {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-      border-radius: 999px;
-      font-weight: 700;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-primary {
-      padding: 14px 28px;
-      color: #22061b;
-      background: linear-gradient(90deg, var(--pink), var(--gold));
-      box-shadow: 0 16px 34px rgba(255,108,168,0.28);
-      font-size: 1rem;
-    }
-
-    .btn-secondary {
-      padding: 14px 24px;
-      color: var(--text);
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--border);
-      font-size: 0.98rem;
-    }
-
-    .page-one .title { font-size: clamp(2.4rem, 6vw, 4rem); }
-
-    .page-two .story-block {
-      text-align: left;
-      display: grid;
-      gap: 16px;
-      margin-top: 8px;
-    }
-
-    .story-block p {
-      font-size: clamp(1rem, 2vw, 1.14rem);
-      line-height: 1.9;
-      color: var(--muted);
-    }
-
-    .chat-scene {
-      position: relative;
-      min-height: 440px;
-      border-radius: 24px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      padding: 20px;
-    }
-
-    .bubble {
-      position: absolute;
-      max-width: 320px;
-      padding: 14px 16px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: #fffafc;
-      font-size: 0.96rem;
-      line-height: 1.55;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.16);
-      opacity: 0;
-      transform: translateY(18px) scale(0.96);
-      animation: bubbleRise 1.4s cubic-bezier(.2,.8,.2,1) forwards;
-      animation-delay: var(--delay);
-    }
-
-    .bubble::after {
-      content: "";
-      position: absolute;
-      bottom: -9px;
-      left: 24px;
-      width: 14px;
-      height: 14px;
-      background: inherit;
-      border-right: inherit;
-      border-bottom: inherit;
-      transform: rotate(45deg);
-    }
-
-    .bubble:nth-child(2n) { background: rgba(255,108,168,0.16); }
-
-    .bubble:nth-child(3n) { background: rgba(139,99,255,0.16); }
-
-    @keyframes bubbleRise {
-      0% { opacity: 0; transform: translateY(28px) scale(0.95); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .page-four {
-      text-align: center;
-    }
-
-    .question-block {
-      display: grid;
-      gap: 24px;
-      justify-items: center;
-    }
-
-    .final-copy {
-      font-size: clamp(1.05rem, 2.1vw, 1.3rem);
-      line-height: 1.95;
-      color: var(--muted);
-      max-width: 760px;
-      margin: 0 auto;
-      opacity: 0;
-      transform: translateY(18px);
-    }
-
-    .question-title {
-      font-size: clamp(1.9rem, 3.7vw, 3rem);
-      line-height: 1.2;
-      font-weight: 700;
-      opacity: 0;
-      transform: translateY(16px);
-    }
-
-    .celebration {
-      display: none;
-      text-align: center;
-      gap: 18px;
-      padding-top: 6px;
-    }
-
-    .celebration.show {
-      display: grid;
-    }
-
-    .celebration .title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      margin-bottom: 0;
-    }
-
-    .hearts-icon { font-size: 2.3rem; letter-spacing: 0.3em; }
-
-    @media (max-width: 700px) {
-      .page { min-height: 100vh; padding: 16px; }
-      .card { padding: 22px; border-radius: 24px; }
-      .chat-scene { min-height: 380px; }
-      .bubble { max-width: 73%; font-size: 0.9rem; }
-    }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .28;
+      background-image: radial-gradient(#fff 0.7px, transparent .8px); background-size: 46px 46px;
+      mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); }
+    .glow { position: fixed; width: 340px; height: 340px; border-radius: 50%; filter: blur(90px); opacity: .18; pointer-events: none; }
+    .glow.one { background: #ff8d9d; left: -140px; top: 12%; }
+    .glow.two { background: #d99b72; right: -140px; bottom: 4%; }
+    main { width: min(620px, 100%); position: relative; animation: arrive .9s cubic-bezier(.2,.8,.2,1) both; }
+    .card { position: relative; overflow: hidden; text-align: center; padding: clamp(34px, 8vw, 68px) clamp(24px, 7vw, 58px);
+      border: 1px solid rgba(255,239,228,.25); border-radius: 30px;
+      background: linear-gradient(145deg, rgba(255,248,240,.12), rgba(255,248,240,.045));
+      box-shadow: 0 30px 100px #09040b80, inset 0 1px #fff3; backdrop-filter: blur(18px); }
+    .card::before { content: ""; position: absolute; width: 250px; height: 250px; top: -170px; left: 50%; transform: translateX(-50%);
+      border-radius: 50%; background: #ffb6bd55; filter: blur(38px); }
+    .ornament { color: #f6b9aa; font-size: 24px; letter-spacing: .38em; margin-bottom: 24px; }
+    .eyebrow { margin: 0 0 15px; color: #f1c9c0; font: 600 .7rem/1.4 system-ui, sans-serif; letter-spacing: .28em; text-transform: uppercase; }
+    h1 { margin: 0; color: #fff8f0; font-weight: 400; font-size: clamp(2.35rem, 8vw, 4rem); line-height: 1.05; letter-spacing: -.045em; }
+    h1 span { color: #f3b0ae; font-style: italic; }
+    .copy { margin: 24px auto 0; max-width: 440px; color: var(--muted); font: 400 clamp(1rem, 3.5vw, 1.12rem)/1.8 system-ui, sans-serif; }
+    .divider { display: flex; align-items: center; gap: 13px; width: 100%; max-width: 280px; margin: 31px auto 25px; color: #e9afa8; }
+    .divider::before, .divider::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, #f0c2b477); }
+    .divider::after { transform: rotate(180deg); }
+    .question { margin: 0; color: #fff4eb; font: italic 400 clamp(1.55rem, 5vw, 2.2rem)/1.35 Georgia, serif; }
+    .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
+    button { min-height: 52px; padding: 14px 25px; border-radius: 999px; font: 650 .96rem system-ui, sans-serif; cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s; }
+    button:hover { transform: translateY(-2px); }
+    button:focus-visible { outline: 3px solid #fff4e9; outline-offset: 4px; }
+    .yes { border: 0; color: #321822; background: linear-gradient(115deg, #f4c2ac, #f19ca8); box-shadow: 0 10px 30px #ef99a744; }
+    .yes:hover { box-shadow: 0 14px 38px #ef99a766; }
+    .later { border: 1px solid #fff3e346; color: #f7e4df; background: #ffffff0c; }
+    .later:hover { background: #ffffff18; }
+    .answer { display: none; margin-top: 26px; animation: arrive .6s both; }
+    .answer.show { display: block; }
+    .answer h2 { margin: 0; color: #ffd4c2; font-size: clamp(1.7rem, 6vw, 2.4rem); font-weight: 400; }
+    .answer p { margin: 12px 0 0; color: var(--muted); font: 1rem/1.7 system-ui, sans-serif; }
+    .signature { margin: 32px 0 0; color: #d7b3ae; font: italic 1rem system-ui, sans-serif; }
+    .heart { display: inline-block; color: #f3a5a8; animation: beat 1.7s ease-in-out infinite; }
+    .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: calc(100% - 32px);
+      padding: 12px 18px; border: 1px solid #ffffff22; border-radius: 999px; background: #1d111ded; color: #fff4e9;
+      font: .88rem system-ui, sans-serif; text-align: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .toast.show { opacity: 1; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+    @keyframes beat { 50% { transform: scale(1.18); } }
+    @media (max-width: 480px) { body { padding: 16px; } .card { border-radius: 24px; } .buttons { flex-direction: column; } button { width: 100%; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
-  <canvas id="stars-canvas"></canvas>
-  <canvas id="hearts-canvas"></canvas>
-
-  <main id="app">
-    <section class="page page-one active">
-      <div class="card">
-        <p class="eyebrow">для особливої людини</p>
-        <h1 class="title">Привіт, Соня ❤️</h1>
-        <p class="lead">Ми вже знайомі з тобою з 6-го серпня 11:00 ранку.</p>
-        <div class="button-row">
-          <button class="btn-primary" id="nextOne">Продовжити</button>
-        </div>
+  <div class="glow one" aria-hidden="true"></div><div class="glow two" aria-hidden="true"></div>
+  <main>
+    <section class="card" aria-labelledby="greeting">
+      <div class="ornament" aria-hidden="true">✦　♥　✦</div>
+      <p class="eyebrow">для самой особенной</p>
+      <h1 id="greeting">Привет, <span>Соня</span></h1>
+      <p class="copy">С 21 августа наше знакомство стало для меня чем-то по-настоящему особенным. Мне всё чаще хочется делиться с тобой мыслями, радостями и самыми обычными моментами. Рядом с тобой они становятся теплее.</p>
+      <div class="divider" aria-hidden="true">♥</div>
+      <p class="question">Ты будешь моей девушкой?</p>
+      <div class="buttons" id="buttons">
+        <button class="yes" id="yesBtn" type="button">Да, буду ❤️</button>
+        <button class="later" id="laterBtn" type="button">Мне нужно немного подумать</button>
       </div>
-    </section>
-
-    <section class="page page-two">
-      <div class="card">
-        <p class="eyebrow">ще один момент</p>
-        <div class="story-block">
-          <p>Коли ми почали спілкуватися, я навіть не думав, що звичайне повідомлення може так швидко підняти мені настрій.</p>
-          <p>Мені дуже подобається знайомитися з тобою ближче.</p>
-        </div>
-        <div class="button-row">
-          <button class="btn-primary" id="nextTwo">Продовжити</button>
-        </div>
+      <div class="answer" id="answer" aria-live="polite">
+        <h2>Ура! ❤️</h2>
+        <p>Ты сделала меня самым счастливым. Обещаю беречь твою улыбку и радовать тебя как можно чаще.</p>
       </div>
-    </section>
-
-    <section class="page page-three">
-      <div class="card">
-        <p class="eyebrow">наші слова</p>
-        <div class="chat-scene" id="chatScene"></div>
-        <div class="button-row">
-          <button class="btn-primary" id="nextThree">Продовжити</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="page page-four">
-      <div class="card">
-        <div class="question-block">
-          <p class="eyebrow">одне питання</p>
-          <p class="final-copy" id="finalCopy">Соня...<br /><br />Я не хочу поспішати.<br /><br />Але мені дуже хочеться продовжити знайомитися з тобою.<br /><br />І тому хочу поставити лише одне питання...</p>
-          <h2 class="question-title gradient-text" id="questionTitle">Ти будеш моєю дівчиною? ❤️</h2>
-          <div class="button-row">
-            <button class="btn-primary" id="yesBtn">❤️ Так</button>
-            <button class="btn-secondary" id="laterBtn">😊 Давай ще поспілкуємось</button>
-          </div>
-          <div class="celebration" id="celebration">
-            <div class="hearts-icon">💗💗💗</div>
-            <h3 class="title gradient-text">Обіцяю зробити все, щоб ти усміхалася частіше ❤️</h3>
-          </div>
-        </div>
-      </div>
+      <p class="signature">С теплом, Вова <span class="heart">♥</span></p>
     </section>
   </main>
-
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
-    const pages = Array.from(document.querySelectorAll('.page'));
-    let currentIndex = 0;
-
-    function showPage(index) {
-      pages.forEach((page, i) => page.classList.toggle('active', i === index));
-      currentIndex = index;
-      if (index === 3) {
-        setTimeout(() => {
-          gsap.to('#finalCopy', { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' });
-          gsap.to('#questionTitle', { opacity: 1, y: 0, duration: 1, delay: 0.35, ease: 'power3.out' });
-        }, 700);
-      }
-    }
-
-    document.getElementById('nextOne').addEventListener('click', () => showPage(1));
-    document.getElementById('nextTwo').addEventListener('click', () => showPage(2));
-    document.getElementById('nextThree').addEventListener('click', () => showPage(3));
-
-    const chatMessages = [
-      'як ти то зробив',
-      'я певно вагітна',
-      '2 дня бухала на хаті',
-      'дякуююю',
-      'канєшноооо❤️❤️❤️❤️'
-    ];
-
-    const chatScene = document.getElementById('chatScene');
-    chatMessages.forEach((text, index) => {
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble';
-      bubble.textContent = text;
-      bubble.style.setProperty('--delay', `${index * 0.18}s`);
-      bubble.style.top = `${18 + (index % 3) * 22}%`;
-      bubble.style.left = index % 2 === 0 ? '8%' : '36%';
-      if (index === 4) bubble.style.left = '20%';
-      chatScene.appendChild(bubble);
-    });
-
     const yesBtn = document.getElementById('yesBtn');
     const laterBtn = document.getElementById('laterBtn');
-    const celebration = document.getElementById('celebration');
+    const answer = document.getElementById('answer');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    function evadeLaterButton() {
+      const margin = 18;
+      const maxLeft = Math.max(margin, window.innerWidth - laterBtn.offsetWidth - margin);
+      const maxTop = Math.max(margin, window.innerHeight - laterBtn.offsetHeight - margin);
+      laterBtn.style.position = 'fixed';
+      laterBtn.style.left = `${margin + Math.random() * (maxLeft - margin)}px`;
+      laterBtn.style.top = `${margin + Math.random() * (maxTop - margin)}px`;
+      laterBtn.style.zIndex = '10';
+    }
+
+    laterBtn.addEventListener('pointerenter', evadeLaterButton);
+    laterBtn.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'touch') {
+        event.preventDefault();
+        evadeLaterButton();
+      }
+    });
 
     yesBtn.addEventListener('click', async () => {
       yesBtn.disabled = true;
       laterBtn.disabled = true;
-      setToast('Надсилаю відповідь у Telegram...');
-      celebration.classList.add('show');
-      gsap.fromTo(celebration, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' });
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      celebrate();
-      await sendYes();
+      answer.classList.add('show');
+      document.getElementById('buttons').hidden = true;
+      if (window.confetti) {
+        const end = Date.now() + 1800;
+        (function frame() {
+          window.confetti({ particleCount: 5, angle: 60, spread: 65, origin: { x: 0 }, colors: ['#f3a5a8', '#f4c2ac', '#fff0d9'] });
+          window.confetti({ particleCount: 5, angle: 120, spread: 65, origin: { x: 1 }, colors: ['#f3a5a8', '#f4c2ac', '#fff0d9'] });
+          if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+      }
+      try {
+        const response = await fetch('/yes', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userAgent: navigator.userAgent })
+        });
+        const result = await response.json();
+        if (result.ok && result.telegram) showToast('Твой ответ уже летит ко мне в Telegram ❤️');
+        else showToast('Ответ сохранён на странице, но бот не смог его получить.');
+      } catch (error) {
+        showToast('Ответ принят ❤️');
+        console.error('Не удалось отправить уведомление:', error);
+      }
     });
 
     laterBtn.addEventListener('click', () => {
-      const offsetX = Math.round((Math.random() * 70) - 35);
-      const offsetY = Math.round((Math.random() * 40) - 20);
-      laterBtn.textContent = 'Подумай...';
-      laterBtn.style.pointerEvents = 'none';
-      gsap.to(laterBtn, { x: offsetX, y: offsetY, duration: 0.28, ease: 'power3.out' });
-      gsap.to(laterBtn, { opacity: 0, scale: 0.85, duration: 0.5, delay: 0.2, ease: 'power3.in', onComplete: () => {
-        laterBtn.style.display = 'none';
-      }});
+      showToast('Конечно. Не торопись — мне важно, чтобы тебе было комфортно ❤️');
     });
-
-    async function sendYes() {
-      try {
-        const response = await fetch('/yes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userAgent: navigator.userAgent })
-        });
-        const json = await response.json();
-        if (json.ok && json.telegram) {
-          setToast('Відповідь успішно надіслана ❤️');
-        } else {
-          setToast('Не вдалося надіслати повідомлення. Перевір сервер.', true);
-          console.warn('Telegram send failed', json);
-        }
-      } catch (error) {
-        setToast('Помилка відправки: ' + error.message, true);
-        console.error(error);
-      }
-    }
-
-    function setToast(message, error = false) {
-      let toast = document.getElementById('toastMessage');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toastMessage';
-        toast.style.position = 'fixed';
-        toast.style.left = '50%';
-        toast.style.bottom = '30px';
-        toast.style.transform = 'translateX(-50%)';
-        toast.style.padding = '14px 22px';
-        toast.style.borderRadius = '999px';
-        toast.style.fontSize = '0.95rem';
-        toast.style.backdropFilter = 'blur(14px)';
-        toast.style.background = 'rgba(6, 2, 15, 0.92)';
-        toast.style.color = '#fff';
-        toast.style.boxShadow = '0 18px 45px rgba(0, 0, 0, 0.25)';
-        toast.style.zIndex = 20;
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        document.body.appendChild(toast);
-      }
-      toast.textContent = message;
-      toast.style.background = error ? 'rgba(221, 86, 129, 0.96)' : 'rgba(37, 17, 66, 0.95)';
-      toast.style.opacity = '1';
-      toast.style.transform = 'translate(-50%, 0)';
-      clearTimeout(toast.dismissTimeout);
-      toast.dismissTimeout = setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translate(-50%, 12px)';
-      }, 4200);
-    }
-
-    function celebrate() {
-      const bursts = setInterval(() => {
-        confetti({ particleCount: 28, angle: 60, spread: 70, origin: { x: 0.02 }, colors: ['#ff6ca8', '#ffd4a8', '#8b63ff'] });
-        confetti({ particleCount: 28, angle: 120, spread: 70, origin: { x: 0.98 }, colors: ['#ff6ca8', '#ffd4a8', '#8b63ff'] });
-      }, 400);
-      setTimeout(() => clearInterval(bursts), 3200);
-    }
-
-    // stars animation
-    const starsCanvas = document.getElementById('stars-canvas');
-    const starsCtx = starsCanvas.getContext('2d');
-    let stars = [];
-
-    function resizeStars() {
-      starsCanvas.width = window.innerWidth;
-      starsCanvas.height = window.innerHeight;
-      stars = Array.from({ length: 110 }, () => ({
-        x: Math.random() * starsCanvas.width,
-        y: Math.random() * starsCanvas.height,
-        r: Math.random() * 1.6 + 0.4,
-        a: Math.random() * 0.7 + 0.2,
-        s: Math.random() * 0.2 + 0.04
-      }));
-    }
-
-    function drawStars() {
-      starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-      stars.forEach(star => {
-        star.y += star.s;
-        if (star.y > starsCanvas.height + 6) star.y = -6;
-        starsCtx.beginPath();
-        starsCtx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        starsCtx.fillStyle = `rgba(255,255,255,${star.a})`;
-        starsCtx.fill();
-      });
-      requestAnimationFrame(drawStars);
-    }
-
-    window.addEventListener('resize', resizeStars);
-    resizeStars();
-    drawStars();
-
-    // floating hearts
-    const heartsCanvas = document.getElementById('hearts-canvas');
-    const heartsCtx = heartsCanvas.getContext('2d');
-    let heartParticles = [];
-
-    function resizeHearts() {
-      heartsCanvas.width = window.innerWidth;
-      heartsCanvas.height = window.innerHeight;
-      heartParticles = Array.from({ length: 24 }, () => ({
-        x: Math.random() * heartsCanvas.width,
-        y: Math.random() * heartsCanvas.height,
-        size: Math.random() * 12 + 8,
-        speed: Math.random() * 0.35 + 0.12,
-        sway: Math.random() * 0.8 - 0.4,
-        alpha: Math.random() * 0.35 + 0.18
-      }));
-    }
-
-    function drawHearts() {
-      heartsCtx.clearRect(0, 0, heartsCanvas.width, heartsCanvas.height);
-      heartParticles.forEach(part => {
-        part.y -= part.speed;
-        part.x += part.sway;
-        if (part.y < -20) {
-          part.y = heartsCanvas.height + 16;
-          part.x = Math.random() * heartsCanvas.width;
-        }
-        heartsCtx.save();
-        heartsCtx.globalAlpha = part.alpha;
-        heartsCtx.translate(part.x, part.y);
-        heartsCtx.scale(part.size / 16, part.size / 16);
-        heartsCtx.beginPath();
-        heartsCtx.moveTo(0, 4);
-        heartsCtx.bezierCurveTo(-8, -6, -16, 4, 0, 14);
-        heartsCtx.bezierCurveTo(16, 4, 8, -6, 0, 4);
-        heartsCtx.fillStyle = '#ff6ca8';
-        heartsCtx.fill();
-        heartsCtx.restore();
-      });
-      requestAnimationFrame(drawHearts);
-    }
-
-    window.addEventListener('resize', resizeHearts);
-    resizeHearts();
-    drawHearts();
-
-    gsap.from('.page-one .card', { y: 14, opacity: 0, duration: 1, ease: 'power3.out' });
   </script>
 </body>
 </html>
-

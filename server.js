@@ -31,95 +31,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"))
 })
 
-// Отримання реального IP відвідувача
-function normalizeIp(ip) {
-  if (!ip) return ip
-  if (ip.startsWith("::ffff:")) return ip.replace("::ffff:", "")
-  return ip
-}
-function getClientIp(req) {
-  const forwarded = req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || req.headers["cf-connecting-ip"]
-  if (forwarded) {
-    const first = forwarded.split(",")[0].trim()
-    return normalizeIp(first)
-  }
-  return normalizeIp(req.socket?.remoteAddress) || "невідомо"
-}
-function isPrivateIp(ip) {
-  return !ip || ip === "127.0.0.1" || ip === "::1" || ip === "localhost" ||
-    /^10\./.test(ip) || /^192\.168\./.test(ip) || /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(ip) ||
-    /^169\.254\./.test(ip) || /^fc00:/i.test(ip) || /^fe80:/i.test(ip)
-}
-
-async function resolveGeoForIp(ip) {
-  if (!ip || isPrivateIp(ip)) {
-    return {
-      address: "локально або невідомо",
-      city: "невідомо",
-      region: "невідомо",
-      country: "невідомо",
-      org: "невідомо",
-    }
-  }
-
-  try {
-    const res = await fetch(`https://ipapi.co/${encodeURIComponent(ip)}/json/`)
-    const data = await res.json()
-    return {
-      address: [data.city, data.region, data.country_name].filter(Boolean).join(", ") || "невідомо",
-      city: data.city || "невідомо",
-      region: data.region || "невідомо",
-      country: data.country_name || data.country || "невідомо",
-      org: data.org || "невідомо",
-    }
-  } catch (err) {
-    console.log("[v0] Помилка геолокації IP:", err.message)
-    return {
-      address: "невідомо",
-      city: "невідомо",
-      region: "невідомо",
-      country: "невідомо",
-      org: "невідомо",
-    }
-  }
-}
-
-// Екранування спецсимволів для Telegram HTML
-function escapeHtml(text) {
-  return String(text || "—")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-}
-
 // Ендпоінт: вона сказала ТАК ❤️
 app.post("/yes", async (req, res) => {
-  const data = req.body || {}
-  const ip = getClientIp(req)
-  console.log("[v0] /yes request from", ip, "userAgent:", (req.headers["user-agent"] || "-").toString().slice(0, 140))
-  const geo = await resolveGeoForIp(ip)
-  const now = new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" })
+  const now = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Kyiv" })
+  const message = `💌 Соня ответила «ДА»! ❤️\n\n📅 ${now}\n✨ Теперь вы пара!`
 
-  const message =
-    `💍 <b>ВОНА СКАЗАЛА ТАК!</b> ❤️\n\n` +
-    `📅 <b>Дата:</b> ${escapeHtml(now)}\n` +
-    `🌍 <b>IP:</b> ${escapeHtml(ip)}\n` +
-    `📌 <b>Адреса:</b> ${escapeHtml(geo.address)}\n` +
-    `🏙 <b>Місто:</b> ${escapeHtml(geo.city)}\n` +
-    `📍 <b>Регіон:</b> ${escapeHtml(geo.region)}\n` +
-    `🌎 <b>Країна:</b> ${escapeHtml(geo.country)}\n` +
-    `🏢 <b>Провайдер:</b> ${escapeHtml(geo.org)}\n` +
-    `🌐 <b>Браузер:</b> ${escapeHtml(data.browser)}\n` +
-    `💻 <b>ОС:</b> ${escapeHtml(data.os)}\n` +
-    `📱 <b>Пристрій:</b> ${escapeHtml(data.device)}\n` +
-    `🗣 <b>Мова:</b> ${escapeHtml(data.language)}\n` +
-    `🕓 <b>Часовий пояс:</b> ${escapeHtml(data.timezone)}\n` +
-    `🧾 <b>User-Agent:</b> ${escapeHtml(data.userAgent)}`
-
-  // Якщо токен не налаштований — просто логуємо і повертаємо успіх
   if (!BOT_TOKEN || !CHAT_ID) {
-    console.log("[v0] Telegram не налаштовано. Повідомлення:\n", message.replace(/<[^>]+>/g, ""))
-    return res.json({ ok: true, telegram: false })
+    console.error("[v0] Telegram не настроен: нужны BOT_TOKEN и CHAT_ID")
+    return res.status(503).json({ ok: false, telegram: false })
   }
 
   try {
@@ -133,19 +52,33 @@ app.post("/yes", async (req, res) => {
       }),
     })
     const result = await tgRes.json()
-    console.log("[v0] Telegram API response:", result)
     if (!result.ok) {
-      console.log("[v0] Помилка Telegram API:", result)
-      return res.status(200).json({ ok: true, telegram: false, error: result.description })
+      console.error("[v0] Ошибка Telegram API:", result.description)
+      return res.status(502).json({ ok: false, telegram: false })
     }
-    console.log("[v0] Повідомлення успішно надіслано у Telegram")
     return res.json({ ok: true, telegram: true })
   } catch (err) {
-    console.log("[v0] Помилка надсилання у Telegram:", err.stack || err.message)
-    return res.status(200).json({ ok: true, telegram: false, error: err.message })
+    console.error("[v0] Ошибка отправки в Telegram:", err.message)
+    return res.status(502).json({ ok: false, telegram: false })
   }
 })
 
-app.listen(PORT, () => {
-  console.log(`[v0] Сайт-пропозиція працює на порті ${PORT}`)
-})
+function listen(port) {
+  const server = app.listen(port, "0.0.0.0", () => {
+    console.log(`[proposal] Сайт доступен: http://localhost:${port}`)
+  })
+
+  server.on("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      const nextPort = Number(port) + 1
+      console.warn(`[proposal] Порт ${port} занят; пробую порт ${nextPort}`)
+      listen(nextPort)
+      return
+    }
+
+    console.error("[proposal] Не удалось запустить сервер:", error.message)
+    process.exitCode = 1
+  })
+}
+
+listen(PORT)
